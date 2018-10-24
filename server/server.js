@@ -27,9 +27,11 @@ require('./routers/index')(app, server);
 app.set('view engine', 'pug');
 app.set('views', './views')
 
-app.get('/view-count', function(req, res){
+app.get('/view-count/:subset?/:timeslice?', function(req, res){
   //TODO Turn into module callable from /stats
-  res.send('hello world from views');
+  //subset can be 'topten' or 'all', default to 'topten'
+  //timeslice can be one of [7,14,21,28], default to 14
+  res.send("hello world from views, with subset=\"" + req.params.subset + "\" and timeslice=\"" + req.params.timeslice+"\"");
 });
 
 app.get('/clone-count', function(req, res){
@@ -37,8 +39,28 @@ app.get('/clone-count', function(req, res){
   res.send('hello world from clones');
 });
 
-app.get('/stats', function(req, res){
-  res.render('stats', { title: 'Hey', message: 'Hello there!' });
+app.get('/stats/:stat_type?/:subset?/:timeslice?', function(req, res){
+  
+  var_stat_type = req.params.stat_type;
+  //console.log(req.params.stat_type);
+  if(var_stat_type==undefined){
+    var_stat_type = "views";
+  }
+  
+  var_subset = req.params.subset;
+  if(var_subset==undefined){
+    var_subset = "topten";
+  }
+  
+  var_timeslice = req.params.timeslice;
+  if(var_timeslice==undefined){
+    var_timeslice = "14";
+  }
+  
+  res.render('stats', { title: 'Hey', message: 'Hello there!', 
+    stat_type: var_stat_type, 
+    subset: var_subset, 
+    timeslice: var_timeslice });
 });
 // END Add your code here
 
