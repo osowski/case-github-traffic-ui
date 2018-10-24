@@ -24,6 +24,23 @@ require('./services/index')(app);
 require('./routers/index')(app, server);
 
 // Add your code here
+app.set('view engine', 'pug');
+app.set('views', './views')
+
+app.get('/view-count', function(req, res){
+  //TODO Turn into module callable from /stats
+  res.send('hello world from views');
+});
+
+app.get('/clone-count', function(req, res){
+  //TODO Turn into module callable from /stats
+  res.send('hello world from clones');
+});
+
+app.get('/stats', function(req, res){
+  res.render('stats', { title: 'Hey', message: 'Hello there!' });
+});
+// END Add your code here
 
 const port = process.env.PORT || localConfig.port;
 server.listen(port, function(){
