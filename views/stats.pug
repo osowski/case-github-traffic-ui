@@ -1,16 +1,27 @@
+- var title = "IBM Cloud Architecture & Solution Engineering - GitHub Repository Traffic Statistics";
 html
   head
     title= title
   body
+    h1= title
     ul
       li <a href="/stats/views/topten/14">Top Ten Views</a>
       li <a href="/stats/views/all/14">All Views</a>
       li <a href="/stats/clones/topten/14">Top Ten Clones</a>
       li <a href="/stats/clones/all/14">All Clones</a>
-    h1= message
-    h2= stat_type
-    h2= subset
-    h2= timeslice
+    
+    table
+      tr
+        th Statistic Type
+        th Repository Subset
+        th Time Period
+      tr
+        td= stat_type
+        td= subset
+        td= timeslice
+      
+    hr
+      
     table
       tr
         th Repository

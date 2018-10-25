@@ -84,13 +84,12 @@ app.get('/stats/:stat_type?/:subset?/:timeslice?', function(req, res){
     timeslice = "14";
   }
   
-
   assetStats.getStats(stat_type, subset, timeslice, function(_data){
     console.log("server.js", "In", "/stats", "Entering", "render");
-    res.render('stats', { title: 'Hey', message: 'Hello there!', 
-      stat_type: stat_type, 
+    res.render('stats', {
+      stat_type: stat_type.toUpperCase(), 
       subset: subset, 
-      timeslice: timeslice,
+      timeslice: "Previous " + timeslice + " days",
       stats: _data });
   });
   
