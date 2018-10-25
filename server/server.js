@@ -93,7 +93,7 @@ app.get('/stats/:stat_type?/:subset?/:timeslice?', function(req, res){
 });
 // END Add your code here
 
-const port = process.env.PORT || localConfig.port;
+const port = process.env.PORT || localConfig.port || 3000;
 server.listen(port, function(){
   logger.info(`casegithubtrafficui listening on http://localhost:${port}/appmetrics-dash`);
   logger.info(`casegithubtrafficui listening on http://localhost:${port}`);
