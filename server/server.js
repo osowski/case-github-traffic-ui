@@ -26,7 +26,7 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(log4js.connectLogger(logger, { level: process.env.LOG_LEVEL || 'info' }));
-const serviceManager = require('./services/service-manager');
+//const serviceManager = require('./services/service-manager');
 //require('./services/index')(app);
 require('./routers/index')(app, server);
 
@@ -37,7 +37,6 @@ IBMCloudEnv.init();
 //Establish initial db connectivity here
 const ibmdb = require('ibm_db');
 const dbCreds = IBMCloudEnv.getDictionary("backend-sql-credentials");
-//console.log(dbCreds);
 
 const assetStats = require('./services/asset-stats');
 var dbInit = false;
@@ -58,38 +57,46 @@ ibmdb.open(dbCreds.dsn, function (err,conn) {
   });
 });
 
-//TODO Build out STATS module, including SQL Queries
-
 app.set('view engine', 'pug');
 app.set('views', './views');
 
 app.get('/stats/:stat_type?/:subset?/:timeslice?', function(req, res){
   
-  //console.log("dbInit:"+dbInit);
-  //console.log(assetStats.isInitialized());
-  
   var stat_type = req.params.stat_type;
-  //console.log(req.params.stat_type);
-  if(stat_type==undefined){
-    stat_type = "views";
+  switch (stat_type){
+    case "clones":
+      break;
+    case "views":
+      break;
+    case undefined:
+    default:
+      stat_type = "views";
+      break;
   }
   
   var subset = req.params.subset;
-  if(subset==undefined){
-    subset = "topten";
+  switch (subset){
+    case "all":
+      break;
+    case "topten":
+      break;
+    case undefined:
+    default:
+      subset = "topten";
+    break;
   }
   
   var timeslice = req.params.timeslice;
-  if(timeslice==undefined){
+  if ( !( Number.parseInt(timeslice, 10) > 0 && Number.isSafeInteger(Number.parseInt(timeslice, 10) ) ) )  {
     timeslice = "14";
   }
   
   assetStats.getStats(stat_type, subset, timeslice, function(_data){
     console.log("server.js", "In", "/stats", "Entering", "render");
     res.render('stats', {
-      stat_type: stat_type.toUpperCase(), 
+      stat_type: stat_type, 
       subset: subset, 
-      timeslice: "Previous " + timeslice + " days",
+      timeslice: timeslice,
       stats: _data });
   });
   

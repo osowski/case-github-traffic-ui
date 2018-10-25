@@ -1,36 +1,49 @@
 - var title = "IBM Cloud Architecture & Solution Engineering - GitHub Repository Traffic Statistics";
+- var local_subset = (subset=="topten" ? "Top Ten" : "All");
+- var local_stat_type = (stat_type=="views" ? "Views" : "Clones");
+- var local_timeslice = "Previous " + timeslice + " days";
 html
   head
     title= title
   body
     h1= title
-    ul
-      li <a href="/stats/views/topten/14">Top Ten Views</a>
-      li <a href="/stats/views/all/14">All Views</a>
-      li <a href="/stats/clones/topten/14">Top Ten Clones</a>
-      li <a href="/stats/clones/all/14">All Clones</a>
+    table(style='width: 80%; margin: auto;')
+      tr
+        th <a href="/stats/views/topten/14">Top Ten Views</a>
+        th <a href="/stats/views/all/14">All Views</a>
+        th <a href="/stats/clones/topten/14">Top Ten Clones</a>
+        th <a href="/stats/clones/all/14">All Clones</a>
     
-    table
+    br
+    br
+    
+    table(style='width:100%')
       tr
-        th Statistic Type
-        th Repository Subset
-        th Time Period
+        th(style='width: 33%') Statistic Type
+        th(style='width: 33%') Repository Subset
+        th(style='width: 33%') Time Period
       tr
-        td= stat_type
-        td= subset
-        td= timeslice
+        td(style='text-align: center')= local_stat_type
+        td(style='text-align: center')= local_subset
+        td(style='text-align: center')= local_timeslice
       
     hr
       
-    table
+    table(style='width:50%; margin: auto;')
       tr
         th Repository
-        th Views
-        th Clones
+        th= local_stat_type
+        th Uniques
       each REPO in stats
         tr
           td= REPO.REPOSITORY
-          td= REPO.VIEWS
-          td= REPO.CLONES
+          if stat_type=="views"
+            td= REPO.VIEWS
+          else
+            td= REPO.CLONES
+          td= REPO.UNIQUES
 
-    p All repositories under the <a href="https://github.com/ibm-cloud-architecture" target="_blank">ibm-cloud-architecture</a> GitHub organization
+    br
+    br
+    br
+    p(style="width: 100%; text-align: center;") All repositories under the <a href="https://github.com/ibm-cloud-architecture" target="_blank">ibm-cloud-architecture</a> GitHub organization
