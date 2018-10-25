@@ -2,9 +2,11 @@
 applications:
 - instances: 1
   timeout: 180
-  name: casegithubtrafficui
+  name: case-github-traffic-ui
   buildpack: sdk-for-nodejs
   command: npm start
   memory: 256M
-  domain: mybluemix.net
-  host: case-github-traffic-ui
+  routes:
+    - route: case-github-traffic-ui.mybluemix.net
+  services:
+    - ghstatsDB

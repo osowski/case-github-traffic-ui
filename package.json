@@ -1,5 +1,5 @@
 {
-  "name": "casegithubtrafficui",
+  "name": "case-github-traffic-ui",
   "version": "1.0.0",
   "description": "A generated IBM Cloud application",
   "private": true,
@@ -18,14 +18,13 @@
     }
   },
   "dependencies": {
-    "appmetrics-dash": "^4.0.0",
-    "appmetrics-prometheus": "^2.0.0",
-    "appmetrics-zipkin": "^1.0.4",
+    
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
-    "ibm-cloud-env": "^0",
+    "ibm-cloud-env": "^0.2.6",
     "log4js": "^3.0.5",
-    "pug": "^2.0.3"
+    "pug": "^2.0.3",
+    "ibm_db": "^2.4.1"
   },
   "devDependencies": {
     "nodemon": "^1.12.1",

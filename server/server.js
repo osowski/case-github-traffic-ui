@@ -5,8 +5,15 @@
 //     serviceName:'frontend'
 // });
 
-require('appmetrics-dash').attach();
-require('appmetrics-prometheus').attach();
+/**
+Add back to package.json
+"appmetrics-dash": "^4.0.0",
+"appmetrics-prometheus": "^2.0.0",
+"appmetrics-zipkin": "^1.0.4",
+**/
+
+//require('appmetrics-dash').attach();
+//require('appmetrics-prometheus').attach();
 const appName = require('./../package').name;
 const http = require('http');
 const express = require('express');
@@ -20,10 +27,31 @@ const server = http.createServer(app);
 
 app.use(log4js.connectLogger(logger, { level: process.env.LOG_LEVEL || 'info' }));
 const serviceManager = require('./services/service-manager');
-require('./services/index')(app);
+//require('./services/index')(app);
 require('./routers/index')(app, server);
 
 // Add your code here
+var IBMCloudEnv = require('ibm-cloud-env');
+IBMCloudEnv.init();
+
+//Establish initial db connectivity here
+const ibmdb = require('ibm_db');
+const dbCreds = IBMCloudEnv.getDictionary("backend-sql-credentials");
+console.log(dbCreds);
+
+ibmdb.open(dbCreds.dsn, function (err,conn) {
+  if (err) return console.log(err);
+  
+  conn.query('select 1 from sysibm.sysdummy1', function (err, data) {
+    if (err) console.log(err);
+    else console.log(data);
+ 
+    conn.close(function () {
+      console.log('done');
+    });
+  });
+});
+
 app.set('view engine', 'pug');
 app.set('views', './views')
 
@@ -61,6 +89,7 @@ app.get('/stats/:stat_type?/:subset?/:timeslice?', function(req, res){
     stat_type: var_stat_type, 
     subset: var_subset, 
     timeslice: var_timeslice });
+    
 });
 // END Add your code here
 

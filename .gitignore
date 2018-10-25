@@ -2,6 +2,8 @@ node_modules
 node_modules_linux
 server/localdev-config.json
 server/localdev-config.json
+server/config/local.json
 vcap-local.js
 credentials.json
 localdev-config.json
+.ibm-project

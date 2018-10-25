@@ -1,0 +1,8 @@
+{
+  "backend-sql-credentials":{
+    "searchPatterns": [
+      "cloudfoundry:ghstatsDB",
+      "file:/server/config/local.json:$.dashDB[?(@.instance_name=='ghstatsDB')].credentials"
+    ]
+  }
+}
