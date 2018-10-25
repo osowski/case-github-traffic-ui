@@ -37,59 +37,63 @@ IBMCloudEnv.init();
 //Establish initial db connectivity here
 const ibmdb = require('ibm_db');
 const dbCreds = IBMCloudEnv.getDictionary("backend-sql-credentials");
-console.log(dbCreds);
+//console.log(dbCreds);
 
+const assetStats = require('./services/asset-stats');
+var dbInit = false;
 ibmdb.open(dbCreds.dsn, function (err,conn) {
   if (err) return console.log(err);
   
   conn.query('select 1 from sysibm.sysdummy1', function (err, data) {
     if (err) console.log(err);
-    else console.log(data);
- 
+    else {
+      console.log("db init successful");
+      dbInit = true;
+      assetStats.initialized(dbCreds.dsn);
+    }
+    
     conn.close(function () {
       console.log('done');
     });
   });
 });
 
+//TODO Build out STATS module, including SQL Queries
+
 app.set('view engine', 'pug');
-app.set('views', './views')
-
-app.get('/view-count/:subset?/:timeslice?', function(req, res){
-  //TODO Turn into module callable from /stats
-  //subset can be 'topten' or 'all', default to 'topten'
-  //timeslice can be one of [7,14,21,28], default to 14
-  res.send("hello world from views, with subset=\"" + req.params.subset + "\" and timeslice=\"" + req.params.timeslice+"\"");
-});
-
-app.get('/clone-count', function(req, res){
-  //TODO Turn into module callable from /stats
-  res.send('hello world from clones');
-});
+app.set('views', './views');
 
 app.get('/stats/:stat_type?/:subset?/:timeslice?', function(req, res){
   
-  var_stat_type = req.params.stat_type;
+  //console.log("dbInit:"+dbInit);
+  //console.log(assetStats.isInitialized());
+  
+  var stat_type = req.params.stat_type;
   //console.log(req.params.stat_type);
-  if(var_stat_type==undefined){
-    var_stat_type = "views";
+  if(stat_type==undefined){
+    stat_type = "views";
   }
   
-  var_subset = req.params.subset;
-  if(var_subset==undefined){
-    var_subset = "topten";
+  var subset = req.params.subset;
+  if(subset==undefined){
+    subset = "topten";
   }
   
-  var_timeslice = req.params.timeslice;
-  if(var_timeslice==undefined){
-    var_timeslice = "14";
+  var timeslice = req.params.timeslice;
+  if(timeslice==undefined){
+    timeslice = "14";
   }
   
-  res.render('stats', { title: 'Hey', message: 'Hello there!', 
-    stat_type: var_stat_type, 
-    subset: var_subset, 
-    timeslice: var_timeslice });
-    
+
+  assetStats.getStats(stat_type, subset, timeslice, function(_data){
+    console.log("server.js", "In", "/stats", "Entering", "render");
+    res.render('stats', { title: 'Hey', message: 'Hello there!', 
+      stat_type: stat_type, 
+      subset: subset, 
+      timeslice: timeslice,
+      stats: _data });
+  });
+  
 });
 // END Add your code here
 

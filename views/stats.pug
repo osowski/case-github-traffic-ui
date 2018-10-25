@@ -11,3 +11,13 @@ html
     h2= stat_type
     h2= subset
     h2= timeslice
+    table
+      tr
+        th Repository
+        th Views
+        th Clones
+      each REPO in stats
+        tr
+          td= REPO.REPOSITORY
+          td= REPO.VIEWS
+          td= REPO.CLONES

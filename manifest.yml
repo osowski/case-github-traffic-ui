@@ -5,7 +5,7 @@ applications:
   name: case-github-traffic-ui
   buildpack: sdk-for-nodejs
   command: npm start
-  memory: 256M
+  memory: 512M
   routes:
     - route: case-github-traffic-ui.mybluemix.net
   services:
