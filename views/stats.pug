@@ -5,7 +5,18 @@
 html
   head
     title= title
+    script(src='//code.jquery.com/jquery-3.3.1.slim.min.js', integrity='sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=', crossorigin='anonymous')
+    
+
   body
+    link(rel='stylesheet', type='text/css', href='//cdn.datatables.net/1.10.19/css/jquery.dataTables.css')
+    script(type='text/javascript', charset='utf8', src='//cdn.datatables.net/1.10.19/js/jquery.dataTables.js')
+    script(type='text/javascript').
+      $(document).ready( function () {
+        $('#statsTable').DataTable({
+          "order": [[1, 'desc']]
+        }); 
+      });
     h1= title
     table(style='width: 80%; margin: auto;')
       tr
@@ -29,11 +40,12 @@ html
       
     hr
       
-    table(style='width:50%; margin: auto;')
-      tr
-        th Repository
-        th= local_stat_type
-        th Uniques
+    table(id='statsTable' class='display')
+      thead
+        tr
+          th Repository
+          th= local_stat_type
+          th Uniques
       each REPO in stats
         tr
           td= REPO.REPOSITORY
