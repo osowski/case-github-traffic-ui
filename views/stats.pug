@@ -1,7 +1,11 @@
 - var title = "IBM Cloud Architecture & Solution Engineering - GitHub Repository Traffic Statistics";
 - var local_subset = (subset=="topten" ? "Top Ten" : "All");
 - var local_stat_type = (stat_type=="views" ? "Views" : "Clones");
-- var local_timeslice = "Previous " + timeslice + " days";
+- var today = new Date();
+- var initialDate = new Date();
+- initialDate.setDate(initialDate.getDate() - timeslice);
+- var interval = "("+ initialDate.toLocaleDateString("en-US") + " - " + today.toLocaleDateString("en-US") + ")";
+- var local_timeslice = "Previous " + timeslice + " days " + interval;
 html
   head
     title= title
