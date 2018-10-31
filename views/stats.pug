@@ -6,6 +6,8 @@
 - initialDate.setDate(initialDate.getDate() - timeslice);
 - var interval = "("+ initialDate.toLocaleDateString("en-US") + " - " + today.toLocaleDateString("en-US") + ")";
 - var local_timeslice = "Previous " + timeslice + " days " + interval;
+- var github_org = (organization!==undefined ? organization : "ibm-cloud-architecture")
+- var github_host = (host!==undefined ? host : "https://github.com")
 html
   head
     title= title
@@ -52,7 +54,8 @@ html
           th Uniques
       each REPO in stats
         tr
-          td= REPO.REPOSITORY
+          td
+            a(href=github_host+"/"+github_org+"/"+REPO.REPOSITORY, target="_blank") #{REPO.REPOSITORY}
           if stat_type=="views"
             td= REPO.VIEWS
           else
