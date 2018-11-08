@@ -80,5 +80,30 @@ exports.getStats = function(stat_type, subset, timeslice, callback){
       });
     });
   });
+};
   
+exports.getRepos = function(callback){
+  console.log("asset-stats", "Entering", "getRepos");
+  
+  var _queryString = "SELECT REPOS.RNAME AS REPOSITORY FROM REPOS ORDER BY REPOSITORY";
+
+  var statsData = [];
+    
+  ibmdb.open(this._dbDSN, function (err,conn) {
+    if (err) return console.log(err);
+    
+    conn.query(_queryString, function (err, data) {
+      if (err) console.log(err);
+      else {
+        //console.log(data);
+        statsData = data;
+      }
+      
+      conn.close(function () {
+        //console.log('done');
+        callback(statsData);
+      });
+    });
+  });
+
 };

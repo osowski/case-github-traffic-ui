@@ -58,7 +58,10 @@ ibmdb.open(dbCreds.dsn, function (err,conn) {
 });
 
 app.set('view engine', 'pug');
+app.set('view options', {debug:  true});
 app.set('views', './views');
+
+app.disable('view cache');
 
 app.get('/stats/:stat_type?/:subset?/:timeslice?', function(req, res){
   
@@ -97,9 +100,19 @@ app.get('/stats/:stat_type?/:subset?/:timeslice?', function(req, res){
       stat_type: stat_type, 
       subset: subset, 
       timeslice: timeslice,
-      stats: _data });
+      stats: _data,
+      debug: true });
   });
   
+});
+
+app.get('/repos', function(req, res){
+  assetStats.getRepos(function(_data){
+    console.log("server.js", "In", "/repos", "Entering", "render");
+    res.render('repos', {
+      repos: _data,
+      debug: true });
+  });
 });
 // END Add your code here
 
